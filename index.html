@@ -4561,7 +4561,7 @@
                 console.error('renderAdvancedMetrics error', e);
             }
         };
-        const renderStatement = () => {
+        const renderStatement = (filters = {}) => {
             try {
                 const statementBody = document.getElementById('statement-tbody');
                 if (!statementBody) return;
@@ -4598,7 +4598,69 @@
                     notes: l.notes || '—'
                 }));
 
-                const allRows = [...tradeRows, ...ledgerRows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
+                let allRows = [...tradeRows, ...ledgerRows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
+                
+                // Apply filters if provided
+                if (filters.transactionType && filters.transactionType !== 'All Types') {
+                    allRows = allRows.filter(row => row.type === filters.transactionType);
+                }
+                
+                if (filters.strategy && filters.strategy !== 'All Strategies') {
+                    allRows = allRows.filter(row => row.strategy === filters.strategy);
+                }
+                
+                if (filters.startDate || filters.endDate) {
+                    allRows = allRows.filter(row => {
+                        if (!row.date || row.date === '—') return false;
+                        
+                        // Parse date from various formats (dd/mm/yyyy, yyyy-mm-dd, etc.)
+                        let rowDate;
+                        try {
+                            if (row.date.includes('/')) {
+                                // Handle dd/mm/yyyy format
+                                const parts = row.date.split('/');
+                                if (parts.length === 3) {
+                                    rowDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                                }
+                            } else {
+                                // Handle yyyy-mm-dd format
+                                rowDate = new Date(row.date);
+                            }
+                        } catch (e) {
+                            console.warn('Invalid date format:', row.date);
+                            return false;
+                        }
+                        
+                        if (isNaN(rowDate.getTime())) return false;
+                        
+                        const startDate = filters.startDate ? new Date(filters.startDate) : null;
+                        const endDate = filters.endDate ? new Date(filters.endDate) : null;
+                        
+                        if (startDate && rowDate < startDate) return false;
+                        if (endDate && rowDate > endDate) return false;
+                        
+                        return true;
+                    });
+                }
+                
+                // Show no results message if no rows match filters
+                if (allRows.length === 0) {
+                    statementBody.innerHTML = `
+                        <tr>
+                            <td colspan="9" class="px-6 py-8 text-center" style="color: var(--text-muted);">
+                                <div class="flex flex-col items-center">
+                                    <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.009-5.824-2.709M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <p class="text-lg font-medium">No results found</p>
+                                    <p class="text-sm">Try adjusting your filter criteria</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
                 statementBody.innerHTML = allRows.map(r => `
                     <tr>
                         <td class="px-6 py-3">${r.date}</td>
@@ -7980,6 +8042,42 @@
                 showToast('All data cleared.', 'success');
             } catch (e) { console.error('clear failed', e); }
         });
+        
+        // Trade Statement Filter Event Listeners
+        document.getElementById('apply-filter-btn')?.addEventListener('click', () => {
+            // Get filter values from form elements
+            const transactionType = document.getElementById('filter-type')?.value || 'All Types';
+            const strategy = document.getElementById('filter-strategy')?.value || 'All Strategies';
+            const startDate = document.getElementById('filter-start-date')?.value || '';
+            const endDate = document.getElementById('filter-end-date')?.value || '';
+            
+            // Apply filters to statement
+            const filters = {
+                transactionType: transactionType !== 'All Types' ? transactionType : null,
+                strategy: strategy !== 'All Strategies' ? strategy : null,
+                startDate: startDate || null,
+                endDate: endDate || null
+            };
+            
+            renderStatement(filters);
+        });
+        
+        document.getElementById('reset-filter-btn')?.addEventListener('click', () => {
+            // Reset all filter form elements to default values
+            const filterType = document.getElementById('filter-type');
+            const filterStrategy = document.getElementById('filter-strategy');
+            const filterStartDate = document.getElementById('filter-start-date');
+            const filterEndDate = document.getElementById('filter-end-date');
+            
+            if (filterType) filterType.value = 'All Types';
+            if (filterStrategy) filterStrategy.value = 'All Strategies';
+            if (filterStartDate) filterStartDate.value = '';
+            if (filterEndDate) filterEndDate.value = '';
+            
+            // Render statement without filters (show all data)
+            renderStatement();
+        });
+        
         setKeysBtn?.addEventListener('click', async () => {
             const url = prompt('Enter SUPABASE_URL');
             if (!url) return;
