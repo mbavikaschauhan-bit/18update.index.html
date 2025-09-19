@@ -775,6 +775,7 @@
             border-radius: 4px;
             transition: background-color 0.2s ease;
             color: var(--text-secondary);
+            vertical-align: middle;
         }
         
         .action-icon:hover {
@@ -836,6 +837,14 @@
         
         .menu-item svg {
             flex-shrink: 0;
+        }
+        
+        /* Ensure actions column content is aligned in one line */
+        .actions-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
         }
 
         /* Responsive tooltip positioning */
@@ -1429,43 +1438,43 @@
                             <div id="journal-tab-content" class="hidden space-y-6">
                                 <!-- Main Journal Form Container -->
                                 <div class="py-4 px-3 rounded-lg shadow-sm" style="background-color: var(--bg-primary); border: 1px solid var(--border-color);">
-                                    <div class="flex justify-center">
-                                        <div class="w-full">
+                                <div class="flex justify-center">
+                                    <div class="w-full">
                                             <!-- Strategy and Outcome Section - Above Psychology and Notes -->
                                             <div class="p-3 rounded-md shadow-sm mb-4" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
-                                                <h3 class="text-base font-semibold mb-2 border-b pb-1" style="color: var(--text-primary); border-color: var(--border-color);">Strategy and Outcome</h3>
-                                                <div class="grid grid-cols-2 gap-3">
-                                                    <div>
-                                                        <label for="strategy" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Strategy Tag</label>
-                                                        <select name="strategy" id="strategy" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
-                                                            <option value="Price Action" selected>Price Action</option>
-                                                            <option value="Trend Following">Trend Following</option>
-                                                            <option value="Breakout">Breakout</option>
-                                                            <option value="Reversal">Reversal</option>
-                                                            <option value="Scalping">Scalping</option>
-                                                            <option value="Swing Trading">Swing Trading</option>
-                                                            <option value="Support/Resistance">Support/Resistance</option>
-                                                            <option value="Moving Average">Moving Average</option>
-                                                            <option value="RSI Strategy">RSI Strategy</option>
-                                                            <option value="MACD Strategy">MACD Strategy</option>
-                                                            <option value="News Based">News Based</option>
-                                                            <option value="Other">Other</option>
-                                                        </select>
-                                                    </div>
-                                                    <div>
-                                                        <label for="outcome-summary" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Outcome Summary</label>
-                                                        <select name="outcomeSummary" id="outcome-summary" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
-                                                            <option>Select outcome summary</option>
-                                                            <option>Target Hit</option>
-                                                            <option>Stop Loss Hit</option>
-                                                            <option>Exited Early (Profit)</option>
-                                                            <option>Exited Early (Loss)</option>
-                                                            <option>Break Even</option>
-                                                        </select>
-                                                    </div>
+                                            <h3 class="text-base font-semibold mb-2 border-b pb-1" style="color: var(--text-primary); border-color: var(--border-color);">Strategy and Outcome</h3>
+                                            <div class="grid grid-cols-2 gap-3">
+                                                <div>
+                                                    <label for="strategy" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Strategy Tag</label>
+                                                    <select name="strategy" id="strategy" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
+                                                        <option value="Price Action" selected>Price Action</option>
+                                                        <option value="Trend Following">Trend Following</option>
+                                                        <option value="Breakout">Breakout</option>
+                                                        <option value="Reversal">Reversal</option>
+                                                        <option value="Scalping">Scalping</option>
+                                                        <option value="Swing Trading">Swing Trading</option>
+                                                        <option value="Support/Resistance">Support/Resistance</option>
+                                                        <option value="Moving Average">Moving Average</option>
+                                                        <option value="RSI Strategy">RSI Strategy</option>
+                                                        <option value="MACD Strategy">MACD Strategy</option>
+                                                        <option value="News Based">News Based</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
                                                 </div>
-                                            </div>
-                                            
+                                                <div>
+                                                    <label for="outcome-summary" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Outcome Summary</label>
+                                                    <select name="outcomeSummary" id="outcome-summary" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
+                                                        <option>Select outcome summary</option>
+                                                        <option>Target Hit</option>
+                                                        <option>Stop Loss Hit</option>
+                                                        <option>Exited Early (Profit)</option>
+                                                        <option>Exited Early (Loss)</option>
+                                                        <option>Break Even</option>
+                                                    </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                         <!-- Left Column - Psychology -->
                                         <div class="p-3 rounded-md shadow-sm" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
@@ -2522,6 +2531,8 @@
             }
         };
 
+        const collection = (collectionName) => collectionName;
+        
         const query = (collectionName, ...constraints) => {
             let q = { collection: collectionName, filters: [], orderBy: null, limit: null };
             constraints.forEach(c => { q = c(q); });
@@ -3242,6 +3253,7 @@
                 renderDashboard();
             }
             if (pageId === 'trade-history') {
+                console.log('Navigating to trade-history page');
                 renderTradeHistory();
             }
             if (pageId === 'fund-management') {
@@ -3546,7 +3558,7 @@
                             <td class="px-6 py-3">${t.quantity ?? '—'}</td>
                             <td class="px-6 py-3">${t.exit_price ?? '—'}</td>
                             <td class="px-6 py-3">${t.exit_date || '—'}</td>
-                            <td class="px-6 py-3 space-x-2">
+                            <td class="px-6 py-3 actions-cell">
                                 ${isClosed ? 
                                     // Closed trades: Show Edit and Delete icons only
                                     `<button class="action-icon" data-action="edit" data-id="${t.id}" title="Edit Trade">
@@ -3599,154 +3611,182 @@
                         </tr>`;
                 }).join('');
                 tbody.innerHTML = rowsHtml;
-
-                // Event delegation for all trade actions (icons and menu items)
-                tbody.addEventListener('click', (e) => {
-                    const target = e.target.closest('[data-action]');
-                    if (!target) return;
-                    
-                    const action = target.getAttribute('data-action');
-                    const id = target.getAttribute('data-id');
-                    
-                    if (action === 'edit') {
-                        // Defensive check for editTrade function
-                        if (typeof editTrade === 'function') {
-                            editTrade(id);
-                        } else {
-                            // Fallback to existing edit logic
-                            const trade = appState.trades.find(x => String(x.id) === String(id));
-                            if (!trade) return;
-                            // populate form
-                            document.getElementById('trade-id').value = trade.id || '';
-                            document.getElementById('asset-input').value = trade.asset || '';
-                            // Split entry datetime into date and time
-                            if (trade.entry_date) {
-                                const entryDateTime = new Date(trade.entry_date);
-                                if (!isNaN(entryDateTime.getTime())) {
-                                    document.getElementById('entry-date').value = entryDateTime.toISOString().split('T')[0];
-                                    document.getElementById('entry-time').value = entryDateTime.toTimeString().slice(0, 5);
-                                } else {
-                                    console.warn('Invalid entry_date in form editing:', trade.entry_date, 'for trade:', trade);
-                                }
-                            } else {
-                                document.getElementById('entry-date').value = '';
-                                document.getElementById('entry-time').value = '';
-                            }
-                            document.getElementById('entry-price').value = trade.entry_price ?? '';
-                            document.getElementById('quantity').value = trade.quantity ?? '';
-                            document.getElementById('stop-loss').value = trade.stop_loss ?? '';
-                            document.getElementById('target').value = trade.target ?? '';
-                            // Split exit datetime into date and time
-                            if (trade.exit_date) {
-                                const exitDateTime = new Date(trade.exit_date);
-                                if (!isNaN(exitDateTime.getTime())) {
-                                    document.getElementById('exit-date').value = exitDateTime.toISOString().split('T')[0];
-                                    document.getElementById('exit-time').value = exitDateTime.toTimeString().slice(0, 5);
-                                } else {
-                                    console.warn('Invalid exit_date in form editing:', trade.exit_date, 'for trade:', trade);
-                                }
-                            } else {
-                                document.getElementById('exit-date').value = '';
-                                document.getElementById('exit-time').value = '';
-                            }
-                            document.getElementById('exit-price').value = trade.exit_price ?? '';
-                            document.getElementById('exit-quantity').value = trade.exit_quantity ?? '';
-                            document.getElementById('brokerage').value = trade.brokerage ?? '';
-                            document.getElementById('other-fees').value = trade.other_fees ?? '';
-                            document.getElementById('direction').value = trade.direction || 'Long';
-                            document.getElementById('segment').value = trade.segment || 'Equity';
-                            document.getElementById('trading-style').value = trade.tradingStyle || 'Intraday';
-                            document.getElementById('strategy').value = trade.strategy || 'Price Action';
-                            document.getElementById('outcome-summary').value = trade.outcomeSummary || '';
-                            document.getElementById('emotional-state').value = trade.emotionalState || '';
-                            document.getElementById('reasons').value = trade.reasons || '';
-                            
-                            // Clear all mistake checkboxes first
-                            document.querySelectorAll('input[name="mistakes"]').forEach(checkbox => {
-                                checkbox.checked = false;
-                            });
-                            
-                            // Check the mistakes that were previously selected
-                            if (trade.mistakes && Array.isArray(trade.mistakes)) {
-                                trade.mistakes.forEach(mistake => {
-                                    const checkbox = document.querySelector(`input[name="mistakes"][value="${mistake}"]`);
-                                    if (checkbox) {
-                                        checkbox.checked = true;
-                                    }
-                                });
-                            }
-                            
-                            updateCalculations();
-                            navigateTo('add-trade');
-                        }
-                    } else if (action === 'delete') {
-                        // Defensive check for deleteTrade function
-                        if (typeof deleteTrade === 'function') {
-                            deleteTrade(id);
-                        } else {
-                            // Fallback to existing delete logic
-                            showConfirmationModal('Delete this trade?', async () => {
-                                try {
-                                    await dataStore.deleteTrade(id);
-                                    appState.trades = await dataStore.getTrades();
-                                    renderTradeHistory();
-                                    renderDashboard();
-                                } catch (err) { console.error('delete trade failed', err); }
-                            }, 'Confirm Deletion', 'Delete');
-                        }
-                    } else if (action === 'exit') {
-                        // Defensive check for exitTrade function
-                        if (typeof exitTrade === 'function') {
-                            exitTrade(id);
-                        } else {
-                            // Fallback to existing exit logic
-                            const trade = appState.trades.find(x => String(x.id) === String(id));
-                            if (!trade) return;
-                            showExitTradeModal(trade);
-                        }
-                    } else if (action === 'menu') {
-                        // Toggle overflow menu
-                        const menu = document.querySelector(`[data-menu-for="${id}"]`);
-                        if (menu) {
-                            // Close all other menus first
-                            document.querySelectorAll('.overflow-menu').forEach(m => {
-                                if (m !== menu) m.classList.add('hidden');
-                            });
-                            menu.classList.toggle('hidden');
-                        }
-                    }
-                });
-                
-                // Close overflow menus when clicking outside or pressing Escape
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.overflow-menu') && !e.target.closest('.overflow-menu-btn')) {
-                        document.querySelectorAll('.overflow-menu').forEach(menu => {
-                            menu.classList.add('hidden');
-                        });
-                    }
-                });
-                
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        document.querySelectorAll('.overflow-menu').forEach(menu => {
-                            menu.classList.add('hidden');
-                        });
-                    }
-                });
-                
-                // Keep existing view-partial functionality
-                tbody.querySelectorAll('span[data-action="view-partial"]').forEach(span => {
-                    span.addEventListener('click', () => {
-                        const id = span.getAttribute('data-id');
-                        const trade = appState.trades.find(x => String(x.id) === String(id));
-                        if (!trade) return;
-                        showPartialExitDetailsModal(trade);
-                    });
-                });
             } catch (e) {
                 console.error('renderTradeHistory error', e);
             }
         };
+
+        // Document-level event delegation for trade table actions (works regardless of re-renders)
+        const setupTradeTableEventListeners = () => {
+            console.log('Setting up document-level trade table event listeners...');
+            
+            // Use document-level event delegation - this will work even if elements are re-rendered
+            document.addEventListener('click', (e) => {
+                // Only handle clicks within the trade history table
+                const tradeTable = e.target.closest('#trade-history-tbody');
+                if (!tradeTable) return;
+                
+                console.log('Trade table clicked:', e.target);
+                const target = e.target.closest('[data-action]');
+                if (!target) {
+                    console.log('No data-action found');
+                    return;
+                }
+                
+                const action = target.getAttribute('data-action');
+                const id = target.getAttribute('data-id');
+                console.log('Action:', action, 'ID:', id);
+                
+                if (action === 'edit') {
+                    console.log('Edit action triggered for trade ID:', id);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Find the trade and populate the form
+                    const trade = appState.trades.find(x => String(x.id) === String(id));
+                    if (!trade) {
+                        console.error('Trade not found for ID:', id);
+                        return;
+                    }
+                    
+                    console.log('Found trade:', trade);
+                    
+                    // Populate form with trade data - with defensive checks
+                    const setFieldValue = (fieldId, value) => {
+                        const field = document.getElementById(fieldId);
+                        if (field) {
+                            field.value = value || '';
+                        } else {
+                            console.warn(`Form field not found: ${fieldId}`);
+                        }
+                    };
+                    
+                    setFieldValue('trade-id', trade.id);
+                    setFieldValue('asset-input', trade.asset);
+                    
+                    // Split entry datetime into date and time
+                    if (trade.entry_date) {
+                        const entryDateTime = new Date(trade.entry_date);
+                        if (!isNaN(entryDateTime.getTime())) {
+                            setFieldValue('entry-date', entryDateTime.toISOString().split('T')[0]);
+                            setFieldValue('entry-time', entryDateTime.toTimeString().slice(0, 5));
+                        } else {
+                            console.warn('Invalid entry_date in form editing:', trade.entry_date, 'for trade:', trade);
+                            setFieldValue('entry-date', '');
+                            setFieldValue('entry-time', '');
+                        }
+                    } else {
+                        setFieldValue('entry-date', '');
+                        setFieldValue('entry-time', '');
+                    }
+                    
+                    setFieldValue('entry-price', trade.entry_price);
+                    setFieldValue('quantity', trade.quantity);
+                    setFieldValue('stop-loss', trade.stop_loss);
+                    setFieldValue('target', trade.target);
+                    
+                    // Split exit datetime into date and time
+                    if (trade.exit_date) {
+                        const exitDateTime = new Date(trade.exit_date);
+                        if (!isNaN(exitDateTime.getTime())) {
+                            setFieldValue('exit-date', exitDateTime.toISOString().split('T')[0]);
+                            setFieldValue('exit-time', exitDateTime.toTimeString().slice(0, 5));
+                        } else {
+                            console.warn('Invalid exit_date in form editing:', trade.exit_date, 'for trade:', trade);
+                            setFieldValue('exit-date', '');
+                            setFieldValue('exit-time', '');
+                        }
+                    } else {
+                        setFieldValue('exit-date', '');
+                        setFieldValue('exit-time', '');
+                    }
+                    
+                    setFieldValue('exit-price', trade.exit_price);
+                    setFieldValue('exit-quantity', trade.exit_quantity);
+                    setFieldValue('brokerage', trade.brokerage);
+                    setFieldValue('other-fees', trade.other_fees);
+                    setFieldValue('direction', trade.direction || 'Long');
+                    setFieldValue('segment', trade.segment || 'Equity');
+                    setFieldValue('trading-style', trade.tradingStyle || 'Intraday');
+                    setFieldValue('strategy', trade.strategy || 'Price Action');
+                    setFieldValue('outcome-summary', trade.outcomeSummary);
+                    setFieldValue('emotional-state', trade.emotionalState);
+                    setFieldValue('reasons', trade.reasons);
+                    
+                    // Clear all mistake checkboxes first
+                    document.querySelectorAll('input[name="mistakes"]').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    
+                    // Check the mistakes that were previously selected
+                    if (trade.mistakes && Array.isArray(trade.mistakes)) {
+                        trade.mistakes.forEach(mistake => {
+                            const checkbox = document.querySelector(`input[name="mistakes"][value="${mistake}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        });
+                    }
+                    
+                    updateCalculations();
+                    navigateTo('add-trade');
+                    console.log('Edit completed - navigated to add-trade page');
+                    
+                } else if (action === 'delete') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showConfirmationModal('Delete this trade?', async () => {
+                        try {
+                            await dataStore.deleteTrade(id);
+                            appState.trades = await dataStore.getTrades();
+                            renderTradeHistory();
+                            renderDashboard();
+                        } catch (err) { console.error('delete trade failed', err); }
+                    }, 'Confirm Deletion', 'Delete');
+                    
+                } else if (action === 'exit') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const trade = appState.trades.find(x => String(x.id) === String(id));
+                    if (!trade) return;
+                    showExitTradeModal(trade);
+                    
+                } else if (action === 'menu') {
+                    // Toggle overflow menu
+                    const menu = document.querySelector(`[data-menu-for="${id}"]`);
+                    if (menu) {
+                        // Close all other menus first
+                        document.querySelectorAll('.overflow-menu').forEach(m => {
+                            if (m !== menu) m.classList.add('hidden');
+                        });
+                        menu.classList.toggle('hidden');
+                    }
+                }
+            });
+            
+            console.log('Document-level trade table event listener attached successfully');
+        };
+
+        // Global event listeners for overflow menu management (set up once)
+        const setupGlobalEventListeners = () => {
+            // Close overflow menus when clicking outside or pressing Escape
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.overflow-menu') && !e.target.closest('.overflow-menu-btn')) {
+                    document.querySelectorAll('.overflow-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.overflow-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
+                }
+            });
+        };
+
         // Helper function to update metric cards
         const updateMetricCard = (elementId, value, colorClass) => {
             const element = document.getElementById(elementId);
@@ -4861,6 +4901,9 @@
                 const challenge = JSON.parse(localStorage.getItem('activeChallenge') || 'null');
                 const activeContainer = document.getElementById('challenge-active-container');
                 const inactiveContainer = document.getElementById('challenge-inactive-container');
+                
+                // Get theme colors for chart rendering
+                const themeColors = getThemeColors();
                 
                 console.log('renderChallenge called - Challenge:', challenge, 'Trades count:', appState.trades?.length || 0);
                 
@@ -8050,6 +8093,10 @@
         feather.replace();
         // Ensure export buttons are wired on initial load as well
         wireCsvButtons();
+        // Setup global event listeners
+        setupGlobalEventListeners();
+        // Setup trade table event listeners
+        setupTradeTableEventListeners();
         
 
         // Wait for Chart.js to load, then render charts
