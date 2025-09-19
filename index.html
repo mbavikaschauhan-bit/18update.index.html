@@ -762,6 +762,82 @@
             visibility: visible !important;
         }
         
+        /* Trade History Action Icons and Menu Styles */
+        .action-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            color: var(--text-secondary);
+        }
+        
+        .action-icon:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .exit-btn {
+            padding: 2px 8px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .exit-btn:hover {
+            background-color: var(--bg-secondary);
+        }
+        
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            min-width: 140px;
+            padding: 4px 0;
+        }
+        
+        [data-theme="dark"] .overflow-menu {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: background-color 0.2s ease;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--bg-secondary);
+        }
+        
+        .menu-item svg {
+            flex-shrink: 0;
+        }
+
         /* Responsive tooltip positioning */
         @media (max-width: 640px) {
             .info-tooltip {
@@ -3471,107 +3547,194 @@
                             <td class="px-6 py-3">${t.exit_price ?? '—'}</td>
                             <td class="px-6 py-3">${t.exit_date || '—'}</td>
                             <td class="px-6 py-3 space-x-2">
-                                <button class="text-blue-600 underline text-xs" data-action="edit" data-id="${t.id}">Edit</button>
-                                ${!isClosed ? `<button class="text-green-600 underline text-xs" data-action="exit" data-id="${t.id}">Exit</button>` : ''}
-                                <button class="text-red-600 underline text-xs" data-action="delete" data-id="${t.id}">Delete</button>
+                                ${isClosed ? 
+                                    // Closed trades: Show Edit and Delete icons only
+                                    `<button class="action-icon" data-action="edit" data-id="${t.id}" title="Edit Trade">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="action-icon" data-action="delete" data-id="${t.id}" title="Delete Trade">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3,6 5,6 21,6"></polyline>
+                                            <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                                        </svg>
+                                    </button>` :
+                                    // Partial/Open trades: Show Exit button and three-dot menu
+                                    `<button class="exit-btn" data-action="exit" data-id="${t.id}">Exit</button>
+                                    <div class="relative">
+                                        <button class="action-icon overflow-menu-btn" data-action="menu" data-id="${t.id}" title="More Actions">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="1"></circle>
+                                                <circle cx="19" cy="12" r="1"></circle>
+                                                <circle cx="5" cy="12" r="1"></circle>
+                                            </svg>
+                                        </button>
+                                        <div class="overflow-menu hidden" data-menu-for="${t.id}">
+                                            <button class="menu-item" data-action="exit" data-id="${t.id}">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M9 9l6 6m0-6l-6 6"></path>
+                                                </svg>
+                                                Exit Trade
+                                            </button>
+                                            <button class="menu-item" data-action="edit" data-id="${t.id}">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                </svg>
+                                                Edit
+                                            </button>
+                                            <button class="menu-item" data-action="delete" data-id="${t.id}">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3,6 5,6 21,6"></polyline>
+                                                    <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                                                </svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>`
+                                }
                             </td>
                         </tr>`;
                 }).join('');
                 tbody.innerHTML = rowsHtml;
 
-                // Row actions
-                tbody.querySelectorAll('button[data-action="edit"]').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.getAttribute('data-id');
-                        const trade = appState.trades.find(x => String(x.id) === String(id));
-                        if (!trade) return;
-                        // populate form
-                        document.getElementById('trade-id').value = trade.id || '';
-                        document.getElementById('asset-input').value = trade.asset || '';
-                        // Split entry datetime into date and time
-                        if (trade.entry_date) {
-                            const entryDateTime = new Date(trade.entry_date);
-                            if (!isNaN(entryDateTime.getTime())) {
-                                document.getElementById('entry-date').value = entryDateTime.toISOString().split('T')[0];
-                                document.getElementById('entry-time').value = entryDateTime.toTimeString().slice(0, 5);
-                            } else {
-                                console.warn('Invalid entry_date in form editing:', trade.entry_date, 'for trade:', trade);
-                            }
+                // Event delegation for all trade actions (icons and menu items)
+                tbody.addEventListener('click', (e) => {
+                    const target = e.target.closest('[data-action]');
+                    if (!target) return;
+                    
+                    const action = target.getAttribute('data-action');
+                    const id = target.getAttribute('data-id');
+                    
+                    if (action === 'edit') {
+                        // Defensive check for editTrade function
+                        if (typeof editTrade === 'function') {
+                            editTrade(id);
                         } else {
-                            document.getElementById('entry-date').value = '';
-                            document.getElementById('entry-time').value = '';
-                        }
-                        document.getElementById('entry-price').value = trade.entry_price ?? '';
-                        document.getElementById('quantity').value = trade.quantity ?? '';
-                        document.getElementById('stop-loss').value = trade.stop_loss ?? '';
-                        document.getElementById('target').value = trade.target ?? '';
-                        // Split exit datetime into date and time
-                        if (trade.exit_date) {
-                            const exitDateTime = new Date(trade.exit_date);
-                            if (!isNaN(exitDateTime.getTime())) {
-                                document.getElementById('exit-date').value = exitDateTime.toISOString().split('T')[0];
-                                document.getElementById('exit-time').value = exitDateTime.toTimeString().slice(0, 5);
-                            } else {
-                                console.warn('Invalid exit_date in form editing:', trade.exit_date, 'for trade:', trade);
-                            }
-                        } else {
-                            document.getElementById('exit-date').value = '';
-                            document.getElementById('exit-time').value = '';
-                        }
-                        document.getElementById('exit-price').value = trade.exit_price ?? '';
-                        document.getElementById('exit-quantity').value = trade.exit_quantity ?? '';
-                        document.getElementById('brokerage').value = trade.brokerage ?? '';
-                        document.getElementById('other-fees').value = trade.other_fees ?? '';
-                        document.getElementById('strategy').value = trade.strategy || 'Price Action';
-                        document.getElementById('outcome-summary').value = trade.outcomeSummary || 'Select Outcome Summary';
-                        document.getElementById('reasons').value = trade.reasons || '';
-                        
-                        // Populate Psychology fields
-                        const emotionalStateSelect = document.getElementById('emotional-state');
-                        if (emotionalStateSelect) {
-                            emotionalStateSelect.value = trade.emotionalState || '';
-                        }
-                        
-                        // Clear all mistake checkboxes first
-                        document.querySelectorAll('input[name="mistakes"]').forEach(checkbox => {
-                            checkbox.checked = false;
-                        });
-                        
-                        // Check the mistakes that were previously selected
-                        if (trade.mistakes && Array.isArray(trade.mistakes)) {
-                            trade.mistakes.forEach(mistake => {
-                                const checkbox = document.querySelector(`input[name="mistakes"][value="${mistake}"]`);
-                                if (checkbox) {
-                                    checkbox.checked = true;
+                            // Fallback to existing edit logic
+                            const trade = appState.trades.find(x => String(x.id) === String(id));
+                            if (!trade) return;
+                            // populate form
+                            document.getElementById('trade-id').value = trade.id || '';
+                            document.getElementById('asset-input').value = trade.asset || '';
+                            // Split entry datetime into date and time
+                            if (trade.entry_date) {
+                                const entryDateTime = new Date(trade.entry_date);
+                                if (!isNaN(entryDateTime.getTime())) {
+                                    document.getElementById('entry-date').value = entryDateTime.toISOString().split('T')[0];
+                                    document.getElementById('entry-time').value = entryDateTime.toTimeString().slice(0, 5);
+                                } else {
+                                    console.warn('Invalid entry_date in form editing:', trade.entry_date, 'for trade:', trade);
                                 }
+                            } else {
+                                document.getElementById('entry-date').value = '';
+                                document.getElementById('entry-time').value = '';
+                            }
+                            document.getElementById('entry-price').value = trade.entry_price ?? '';
+                            document.getElementById('quantity').value = trade.quantity ?? '';
+                            document.getElementById('stop-loss').value = trade.stop_loss ?? '';
+                            document.getElementById('target').value = trade.target ?? '';
+                            // Split exit datetime into date and time
+                            if (trade.exit_date) {
+                                const exitDateTime = new Date(trade.exit_date);
+                                if (!isNaN(exitDateTime.getTime())) {
+                                    document.getElementById('exit-date').value = exitDateTime.toISOString().split('T')[0];
+                                    document.getElementById('exit-time').value = exitDateTime.toTimeString().slice(0, 5);
+                                } else {
+                                    console.warn('Invalid exit_date in form editing:', trade.exit_date, 'for trade:', trade);
+                                }
+                            } else {
+                                document.getElementById('exit-date').value = '';
+                                document.getElementById('exit-time').value = '';
+                            }
+                            document.getElementById('exit-price').value = trade.exit_price ?? '';
+                            document.getElementById('exit-quantity').value = trade.exit_quantity ?? '';
+                            document.getElementById('brokerage').value = trade.brokerage ?? '';
+                            document.getElementById('other-fees').value = trade.other_fees ?? '';
+                            document.getElementById('direction').value = trade.direction || 'Long';
+                            document.getElementById('segment').value = trade.segment || 'Equity';
+                            document.getElementById('trading-style').value = trade.tradingStyle || 'Intraday';
+                            document.getElementById('strategy').value = trade.strategy || 'Price Action';
+                            document.getElementById('outcome-summary').value = trade.outcomeSummary || '';
+                            document.getElementById('emotional-state').value = trade.emotionalState || '';
+                            document.getElementById('reasons').value = trade.reasons || '';
+                            
+                            // Clear all mistake checkboxes first
+                            document.querySelectorAll('input[name="mistakes"]').forEach(checkbox => {
+                                checkbox.checked = false;
                             });
+                            
+                            // Check the mistakes that were previously selected
+                            if (trade.mistakes && Array.isArray(trade.mistakes)) {
+                                trade.mistakes.forEach(mistake => {
+                                    const checkbox = document.querySelector(`input[name="mistakes"][value="${mistake}"]`);
+                                    if (checkbox) {
+                                        checkbox.checked = true;
+                                    }
+                                });
+                            }
+                            
+                            updateCalculations();
+                            navigateTo('add-trade');
                         }
-                        
-                        updateCalculations();
-                        navigateTo('add-trade');
-                    });
+                    } else if (action === 'delete') {
+                        // Defensive check for deleteTrade function
+                        if (typeof deleteTrade === 'function') {
+                            deleteTrade(id);
+                        } else {
+                            // Fallback to existing delete logic
+                            showConfirmationModal('Delete this trade?', async () => {
+                                try {
+                                    await dataStore.deleteTrade(id);
+                                    appState.trades = await dataStore.getTrades();
+                                    renderTradeHistory();
+                                    renderDashboard();
+                                } catch (err) { console.error('delete trade failed', err); }
+                            }, 'Confirm Deletion', 'Delete');
+                        }
+                    } else if (action === 'exit') {
+                        // Defensive check for exitTrade function
+                        if (typeof exitTrade === 'function') {
+                            exitTrade(id);
+                        } else {
+                            // Fallback to existing exit logic
+                            const trade = appState.trades.find(x => String(x.id) === String(id));
+                            if (!trade) return;
+                            showExitTradeModal(trade);
+                        }
+                    } else if (action === 'menu') {
+                        // Toggle overflow menu
+                        const menu = document.querySelector(`[data-menu-for="${id}"]`);
+                        if (menu) {
+                            // Close all other menus first
+                            document.querySelectorAll('.overflow-menu').forEach(m => {
+                                if (m !== menu) m.classList.add('hidden');
+                            });
+                            menu.classList.toggle('hidden');
+                        }
+                    }
                 });
-                tbody.querySelectorAll('button[data-action="delete"]').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.getAttribute('data-id');
-                        showConfirmationModal('Delete this trade?', async () => {
-                            try {
-                                await dataStore.deleteTrade(id);
-                                appState.trades = await dataStore.getTrades();
-                                renderTradeHistory();
-                                renderDashboard();
-                            } catch (err) { console.error('delete trade failed', err); }
-                        }, 'Confirm Deletion', 'Delete');
-                    });
+                
+                // Close overflow menus when clicking outside or pressing Escape
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.overflow-menu') && !e.target.closest('.overflow-menu-btn')) {
+                        document.querySelectorAll('.overflow-menu').forEach(menu => {
+                            menu.classList.add('hidden');
+                        });
+                    }
                 });
-                tbody.querySelectorAll('button[data-action="exit"]').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.getAttribute('data-id');
-                        const trade = appState.trades.find(x => String(x.id) === String(id));
-                        if (!trade) return;
-                        showExitTradeModal(trade);
-                    });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.overflow-menu').forEach(menu => {
+                            menu.classList.add('hidden');
+                        });
+                    }
                 });
+                
+                // Keep existing view-partial functionality
                 tbody.querySelectorAll('span[data-action="view-partial"]').forEach(span => {
                     span.addEventListener('click', () => {
                         const id = span.getAttribute('data-id');
