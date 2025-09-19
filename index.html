@@ -6538,7 +6538,7 @@
                     const sortedDates = Array.from(allDates).sort();
                     
                     // If no trades, create comprehensive demo data
-                    let chartLabels, dailyWinRateData, tooltipData;
+                    let chartLabels, dailyWinRateData, avgWinRateData, tooltipData;
                     
                     if (sortedDates.length === 0) {
                         console.log('No trades found, using comprehensive demo data for Daily Win Rate Chart');
@@ -6583,6 +6583,17 @@
                         
                         chartLabels = demoDates.map(date => formatDateDDMMYYYY(date));
                         dailyWinRateData = demoStats.map(stat => stat.rate);
+                        
+                        // Calculate cumulative average win rate for demo data
+                        avgWinRateData = [];
+                        let cumulativeWins = 0;
+                        let cumulativeTrades = 0;
+                        demoStats.forEach((stat, index) => {
+                            cumulativeWins += stat.wins;
+                            cumulativeTrades += stat.total;
+                            avgWinRateData.push(cumulativeTrades > 0 ? (cumulativeWins / cumulativeTrades) * 100 : 0);
+                        });
+                        
                         tooltipData = demoStats.map((stat, index) => ({
                             date: chartLabels[index],
                             dailyWins: stat.wins,
@@ -6600,11 +6611,22 @@
                         // Process actual trade data
                         chartLabels = sortedDates.map(date => formatDateDDMMYYYY(date));
                         dailyWinRateData = [];
+                        avgWinRateData = [];
                         tooltipData = [];
+                        
+                        let cumulativeWins = 0;
+                        let cumulativeTrades = 0;
                         
                         sortedDates.forEach(date => {
                             const stats = calculateDailyWinRateStats(closedTrades, date);
                             dailyWinRateData.push(stats.dailyRatePct);
+                            
+                            // Calculate cumulative average win rate
+                            cumulativeWins += stats.dailyWins;
+                            cumulativeTrades += stats.totalTrades;
+                            const avgWinRate = cumulativeTrades > 0 ? (cumulativeWins / cumulativeTrades) * 100 : 0;
+                            avgWinRateData.push(avgWinRate);
+                            
                             tooltipData.push(stats);
                         });
                     }
@@ -6671,6 +6693,18 @@
                                     tension: 0.4,
                                     pointRadius: 4,
                                     pointHoverRadius: 6
+                                },
+                                {
+                                    label: 'Average Win Rate',
+                                    data: avgWinRateData,
+                                    borderColor: 'rgba(239, 68, 68, 1)',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0.4,
+                                    pointRadius: 3,
+                                    pointHoverRadius: 5,
+                                    borderDash: [5, 5]
                                 }
                             ]
                         },
@@ -6691,7 +6725,17 @@
                                         }
                                     }
                                 },
-                                tooltip: getContinuousTooltipConfig(themeColors, {
+                                tooltip: {
+                                    enabled: true,
+                                    mode: 'index',
+                                    intersect: false,
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#ffffff',
+                                    bodyColor: '#ffffff',
+                                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                                    borderWidth: 1,
+                                    cornerRadius: 6,
+                                    displayColors: true,
                                     callbacks: {
                                         title: function(context) {
                                             const index = context[0].dataIndex;
@@ -6699,21 +6743,18 @@
                                             return `Date: ${data.date}`;
                                         },
                                         label: function(context) {
-                                            const index = context.dataIndex;
-                                            const data = tooltipData[index];
-                                            const lines = [
-                                                `Win Rate: ${data.dailyRatePct.toFixed(2)}%`,
-                                                `Wins/Losses: ${data.dailyWins}/${data.dailyLosses}`,
-                                                `Breakeven: ${data.dailyBreakeven}`,
-                                                `Total Trades: ${data.totalTrades}`,
-                                                `Avg Win: ₹${data.avgWinSize.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`,
-                                                `Avg Loss: ₹${data.avgLossSize.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`,
-                                                `Net P&L: ₹${data.netPnl.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`
-                                            ];
-                                            return lines;
+                                            const datasetLabel = context.dataset.label;
+                                            const value = context.parsed.y;
+                                            
+                                            if (datasetLabel === 'Daily Win Rate') {
+                                                return `Daily Win Rate: ${value.toFixed(1)}%`;
+                                            } else if (datasetLabel === 'Average Win Rate') {
+                                                return `Average Win Rate: ${value.toFixed(1)}%`;
+                                            }
+                                            return `${datasetLabel}: ${value.toFixed(1)}%`;
                                         }
                                     }
-                                }),
+                                },
                             },
                             scales: {
                                 y: {
