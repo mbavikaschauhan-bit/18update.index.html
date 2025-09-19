@@ -1351,49 +1351,45 @@
 
                             <!-- Journal Tab Content -->
                             <div id="journal-tab-content" class="hidden space-y-6">
-                                <!-- Strategy and Outcome Section - Above Psychology and Notes -->
-                                <div class="flex justify-center">
-                                    <div class="w-full">
-                                        <div class="p-3 rounded-md shadow-sm" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
-                                            <h3 class="text-base font-semibold mb-2 border-b pb-1" style="color: var(--text-primary); border-color: var(--border-color);">Strategy and Outcome</h3>
-                                            <div class="grid grid-cols-2 gap-3">
-                                                <div>
-                                                    <label for="strategy" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Strategy Tag</label>
-                                                    <select name="strategy" id="strategy" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
-                                                        <option value="Price Action" selected>Price Action</option>
-                                                        <option value="Trend Following">Trend Following</option>
-                                                        <option value="Breakout">Breakout</option>
-                                                        <option value="Reversal">Reversal</option>
-                                                        <option value="Scalping">Scalping</option>
-                                                        <option value="Swing Trading">Swing Trading</option>
-                                                        <option value="Support/Resistance">Support/Resistance</option>
-                                                        <option value="Moving Average">Moving Average</option>
-                                                        <option value="RSI Strategy">RSI Strategy</option>
-                                                        <option value="MACD Strategy">MACD Strategy</option>
-                                                        <option value="News Based">News Based</option>
-                                                        <option value="Other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label for="outcome-summary" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Outcome Summary</label>
-                                                    <select name="outcomeSummary" id="outcome-summary" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
-                                                        <option>Select outcome summary</option>
-                                                        <option>Target Hit</option>
-                                                        <option>Stop Loss Hit</option>
-                                                        <option>Exited Early (Profit)</option>
-                                                        <option>Exited Early (Loss)</option>
-                                                        <option>Break Even</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <!-- Main Journal Form Container -->
                                 <div class="py-4 px-3 rounded-lg shadow-sm" style="background-color: var(--bg-primary); border: 1px solid var(--border-color);">
                                     <div class="flex justify-center">
                                         <div class="w-full">
+                                            <!-- Strategy and Outcome Section - Above Psychology and Notes -->
+                                            <div class="p-3 rounded-md shadow-sm mb-4" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
+                                                <h3 class="text-base font-semibold mb-2 border-b pb-1" style="color: var(--text-primary); border-color: var(--border-color);">Strategy and Outcome</h3>
+                                                <div class="grid grid-cols-2 gap-3">
+                                                    <div>
+                                                        <label for="strategy" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Strategy Tag</label>
+                                                        <select name="strategy" id="strategy" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
+                                                            <option value="Price Action" selected>Price Action</option>
+                                                            <option value="Trend Following">Trend Following</option>
+                                                            <option value="Breakout">Breakout</option>
+                                                            <option value="Reversal">Reversal</option>
+                                                            <option value="Scalping">Scalping</option>
+                                                            <option value="Swing Trading">Swing Trading</option>
+                                                            <option value="Support/Resistance">Support/Resistance</option>
+                                                            <option value="Moving Average">Moving Average</option>
+                                                            <option value="RSI Strategy">RSI Strategy</option>
+                                                            <option value="MACD Strategy">MACD Strategy</option>
+                                                            <option value="News Based">News Based</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label for="outcome-summary" class="block text-xs font-medium mb-1" style="color: var(--text-secondary);">Outcome Summary</label>
+                                                        <select name="outcomeSummary" id="outcome-summary" class="w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-sm" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); padding: 0.375rem;">
+                                                            <option>Select outcome summary</option>
+                                                            <option>Target Hit</option>
+                                                            <option>Stop Loss Hit</option>
+                                                            <option>Exited Early (Profit)</option>
+                                                            <option>Exited Early (Loss)</option>
+                                                            <option>Break Even</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
                                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                         <!-- Left Column - Psychology -->
                                         <div class="p-3 rounded-md shadow-sm" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
